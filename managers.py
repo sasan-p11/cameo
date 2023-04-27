@@ -85,7 +85,7 @@ class CaptureManager(object):
             self._imageFileName = None
 
         #write to video file if any
-        self._wrieVideoFrame()
+        self._writeVideoFrame()
 
         #release the frame
         self._frame = None
@@ -125,3 +125,34 @@ class CaptureManager(object):
                     int(self._capture.get(cv2.CAP_PROP_FRAME_HEIGHT)))
             self._videoWriter = cv2.VideoWriter(self._videoFilename,self._videoEncoding,fps,size)
         self._videoWriter.write(self._frame)    
+
+
+
+
+
+class WindowManager(object):
+    def __init__(self,windowName,keypressCallback=None):
+        self.keypressCallback = keypressCallback
+
+        self._windowName = windowName
+        self._isWindowCreated = False
+
+    @property
+    def isWindowCreated(self):
+        return self._isWindowCreated
+
+    def createWindow(self):
+        cv2.namedWindow(self._windowName)
+        self._isWindowCreated = True
+
+    def show(self,frame):
+        cv2.imshow(self._windowName,frame)
+
+    def destroyWindow(self):
+        cv2.destroyWindow(self._windowName)
+        self._isWindowCreated = False
+
+    def processEvent(self):
+        keycode = cv2.waitKey(1)
+        if self.keypressCallback is not None and keycode != -1:
+            self.keypressCallback(keycode)
