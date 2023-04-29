@@ -1,4 +1,5 @@
 import cv2
+#import filters
 from managers import WindowManager , CaptureManager
 
 class Cameo(object):
@@ -6,6 +7,7 @@ class Cameo(object):
     def __init__(self):
         self._windowManager = WindowManager("Cameo",self.onKeypress)
         self._captureManager = CaptureManager(cv2.VideoCapture("rtsp://admin:Admin12345%21@192.168.1.108:554/live"),self._windowManager,True)
+       # self._curveFilter = filters.BGRPortraCurveFilter()
 
     def run(self):
         ''' run the main loop'''
@@ -14,9 +16,9 @@ class Cameo(object):
             self._captureManager.enterFrame()
             frame = self._captureManager.frame
 
-            if frame is not None:
-                #TODO: filter the frame
-                pass
+            # if frame is not None:
+            #     filters.strokeEdges(frame, frame)
+            #     self._curveFilter.applay(frame,frame)
 
             self._captureManager.exitFrame()
             self._windowManager.processEvent()
